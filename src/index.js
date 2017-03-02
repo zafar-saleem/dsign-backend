@@ -20,6 +20,14 @@ const db = mongoose.connection;
 const passportStrategy = passportLocal.Strategy;
 const app = express();
 
+app.use(function (request, response, next) {
+    response.setHeader('Access-Control-Allow-Origin', '*');
+    response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    response.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    response.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+});
+
 app.use(express.static(__dirname + '/../public'));
 app.set('views', path.join(__dirname + '/../public/', 'views'));
 app.set('view engine', 'ejs');
@@ -46,7 +54,7 @@ app.use(expressValidator({
             root = namespace.shift(),
             formParam = root;
 
-        while(namespace.length) {
+        while (namespace.length) {
             formParam += '[' + namespace.shift() + ']';
         }
 
