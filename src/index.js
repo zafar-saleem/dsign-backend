@@ -11,12 +11,12 @@ import passport from 'passport';
 import passportLocal from 'passport-local';
 import mongo from 'mongodb';
 import mongoose from 'mongoose';
-mongoose.connect('mongodb://localhost/dsign');
+// mongoose.connect('mongodb://localhost/dsign');
 
 import routes from './routes/home';
 import users from './routes/users';
 
-const db = mongoose.connection;
+// const db = mongoose.connection;
 const passportStrategy = passportLocal.Strategy;
 const app = express();
 

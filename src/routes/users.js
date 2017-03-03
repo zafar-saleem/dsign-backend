@@ -1,4 +1,5 @@
 import express from 'express';
+import UserModel from '../models/UserModel';
 const router = express.Router();
 
 router.get('/register', (request, response) => {
@@ -18,9 +19,36 @@ router.post('/register', (request, response) => {
 
     let errors = request.validationErrors();
 
-    response.json({
-        error: true,
-        errors: errors
+    if (errors) {
+        response.json(errors);
+
+        return;
+    }
+
+    UserModel.findOne({ email: email }, (error, item) => {
+        if (item) {
+            response.json({ errors: true, message: 'User already exist', param: 'email' });
+            return;
+        }
+
+        let newUser = new UserModel({
+            email: email,
+            password: password
+        });
+
+        UserModel.createUser(newUser, (error, user) => {
+            if (error) throw error;
+
+            console.log(user);
+
+            let res = {
+                errors: false,
+                user: user,
+                redirectUrl: '/pages/dashboard.html'
+            };
+
+            response.json(res);
+        });
     });
 });
 
